@@ -1,17 +1,40 @@
 body {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    height: 95vh;
 }
 
 .grid {
-    margin: 200px;
     display: grid;
     min-width: 300px;
     min-height: 400px;
     background-color: blue;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-template-rows: repeat(5, minmax(0, 1fr));
+}
+
+.update,
+.display {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    background-color: beige;
+    min-width: 300px;
+}
+
+.display {
+    font-size: 45px;
+    max-width: 300px;
+    min-height: 50px;
+    max-height: 50px;
+}
+
+.update {
+    min-height: 35px;
+    max-height: 35px;
+    font-size: 30px;
 }
 
 .op-container {
