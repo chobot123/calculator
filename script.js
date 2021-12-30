@@ -16,6 +16,8 @@ const backspace = document.querySelector(`#backspace`);
 let numPressed = [];
 let numStored = [];
 let operStored = "";
+let placeholder = [];
+
 
 
 const add = (array) => {
@@ -48,6 +50,7 @@ const mult = (array) => {
 const div = (array) => {
     let sum = 0;
     return array.reduce((previousValue, currentValue) => {
+        
         sum = Number(previousValue) / Number(currentValue);
         numStored.pop();
         numStored.pop();
@@ -58,13 +61,22 @@ const div = (array) => {
     })
 }
 
+// -----------------------------------------------------------------------------------//
+
 let storeNum = (e) => {
-    if(display.innerHTML == numStored[0]){
+    let displayString = display.innerHTML;
+    let hasE = false;
+    for(let i=0;i<displayString.length;i++){ //get a boolean for if string was simplified (ie has "e")
+        if(displayString[i] === "e"){
+            hasE = true;
+        }
+    }
+
+    if(display.innerHTML === numStored[0] || hasE === true){
         display.innerHTML = "";
     }
-    if(numPressed.length < 10){
+    if(numPressed.length < 14){
         numPressed.push(e.target.innerHTML);
-
         //if first number is 0 and theres more than one number
         if(numPressed[0] === "0" && numPressed.length > 1){
             if(numPressed[1] !== "."){
@@ -80,14 +92,17 @@ let storeNum = (e) => {
 }
 
 let convertDeci = () => {
-    
-    if(numPressed[0] === "0"){ //if first num is 0
+    if(numPressed.length === 14){
+        return;
+    }
+    else if(numPressed[0] === "0"){ //if first num is 0
         numPressed.push(".");
         display.innerHTML += numPressed[1];
     }
     else if(numPressed.length === 0){ //if no num yet and selected decimal
         numPressed.push("0");
         numPressed.push(".");
+        display.innerHTML = "";
         display.innerHTML += numPressed[0];
         display.innerHTML += numPressed[1];
     }
@@ -121,6 +136,7 @@ let selectOp = () => {
         opContainer.children[i].addEventListener("click", operate);
     }
 }
+
 //We want the solution of whatever was operated on to be array[0] and remove rest
 let updateStored = (operator, array) => {
     if (operator  === "add") {
@@ -136,21 +152,79 @@ let updateStored = (operator, array) => {
         numStored.push(div(numStored));
     }
 }
+/*
+    1) check if length > 14
+*/
+let simplify = () => {
+    let newString = "";
+    let oldString = numStored[0].toString();
+    let index = oldString.length;
+    let left = 0;
+    let right = 0;
+    let count = 0;
 
-let operate = (e) => {
-    numStored.push(numPressed.join(""));
-    if(numStored[1] == ""){numStored.pop();}
-    if(operStored !== ""){
-        updateStored(operStored, numStored);
-        if(numStored[0] === "inf"){
-            alert(`ARE YOU TRYING TO DESTROY REALITY??`);
-            reset();
-            return;
-        }
-        display.innerHTML = numStored[0];
+    for(let i=0;i<oldString.length;i++){
+        if(i < 14){newString += oldString[i];}//newString is number but up to 14 digits
+        if(oldString[i] === "."){index = i;}
     }
-    update.innerHTML = `${numStored[0]} ${e.target.innerHTML}`;
+    left = oldString.substring(0, index).length;
+    right = oldString.substring(index+1, oldString.length).length;
+
+    if(left > 14){ // 99999999999999|9999.1231231321 -- length 29
+        count = left - 14; //4 -> ...to the power of
+        //count = 18 - 14 = 4 => substring(0, 13 - 1)
+        newString = oldString.substring(0, 13 - (count.toString().length)) + `e${count}`; // 999999999999e4
+    }
+    else if(left === 14){
+        newString = oldString.substring(0, index);
+    }
+    else { // 1699999999998.3 length - 15 left -13 right 1
+        /*
+        count = 14 - right;
+        console.log(Number(oldString));
+        newString = Number(oldString).toFixed(count);
+        console.log(newString);
+        //newString = Number(oldString).toFixed(count);
+        */
+       if(oldString.at(15) === "."){
+           newString = Math.round(Number(oldString.substring(0,15)));
+       }
+       else{
+        newString = Number(oldString.substring(0,15)).toFixed(oldString.length - right);
+       }
+    }
+    numStored[0] = newString;
+}
+//I need to get the number convert it if it is too big and then display it
+let operate = (e) => {
+    numStored.push(numPressed.join("")); //combines all number inputs into one number
+    placeholder = numStored[0]; //placeholder takes numerical value of num 0 //gets operator
+    if(numStored[1] == ""){ //if there happens to be an empty string pop it
+        numStored.pop();} 
+    if(operStored !== ""){ //if an operator was selected
+        if(numStored.length === 2){ //if there are two numbers to calculate with
+            updateStored(operStored, numStored); //do calculation
+            placeholder = numStored[0]; //in case the number was beyong display scope, have placeholder take value for l8er
+            let num = numStored[0].toString(); //get length of number
+            if(numStored[0] === "inf"){ //if the output is inf reset calculator
+                alert(`ARE YOU TRYING TO DESTROY REALITY??`);
+                reset();
+                return;
+            }
+            if(num.length > 14){ //if the length is > 14
+                //alert(`the value exceeds the scope of the display. Your answer was rounded.`)
+                simplify(); //Simplify the value to fit the scope
+            }
+            
+            console.log(placeholder);
+            display.innerHTML = numStored[0]; //main display => show the calculated number
+        }
+    }
     operStored = e.target.id;
+    update.innerHTML = `${numStored[0]} ${e.target.innerHTML}`;
+    display.innerHTML = numStored[0];
+    console.log(numStored[0])
+    numStored[0] = placeholder;
     numPressed = [];
     equals.addEventListener("click", finalAnswer);
 }

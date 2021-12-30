@@ -10,9 +10,21 @@ body {
     display: grid;
     min-width: 300px;
     min-height: 400px;
-    background-color: blue;
+    background-color: lightskyblue;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     grid-template-rows: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+    padding: 5px;
+    margin: 0px 20px 20px 20px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: lightskyblue;
+    border-radius: 24px;
 }
 
 .update,
@@ -20,31 +32,42 @@ body {
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
-    background-color: beige;
+    background-color: cyan;
     min-width: 300px;
 }
 
 .display {
-    font-size: 45px;
-    max-width: 300px;
+    font-size: 40px;
+    min-width: 400px;
     min-height: 50px;
     max-height: 50px;
+    border-bottom-left-radius: 14px;
+    border-bottom-right-radius: 14px;
 }
 
 .update {
     min-height: 35px;
     max-height: 35px;
+    min-width: 400px;
     font-size: 30px;
+    margin-top: 20px;
+    border-top-left-radius: 14px;
+    border-top-right-radius: 14px;
 }
 
 .op-container {
     display:grid;
     grid-column: 4/5;
     grid-row: 2/6;
+    gap: 10px;
 }
 
 button {
     font-size: 24px;
+    border-radius: 40px;
+    min-width: 90px;
+    color: rgb(75, 75, 247);
+    background-color: lightseagreen;
 }
 
 #clear {
