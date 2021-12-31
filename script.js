@@ -1,7 +1,3 @@
-/*
-
-
-*/
 
 //containers
 const gridContainer = document.querySelector(`.grid`);
