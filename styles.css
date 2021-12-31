@@ -4,6 +4,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 95vh;
+    background-color: turquoise;
 }
 
 .grid {
@@ -32,8 +33,9 @@ body {
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
-    background-color: cyan;
+    background-color: rgb(0, 175, 175);
     min-width: 300px;
+    color: white;
 }
 
 .display {
@@ -46,10 +48,12 @@ body {
 }
 
 .update {
+    justify-content: flex-end;
+    align-items: center;
     min-height: 35px;
     max-height: 35px;
     min-width: 400px;
-    font-size: 30px;
+    font-size: 15px;
     margin-top: 20px;
     border-top-left-radius: 14px;
     border-top-right-radius: 14px;
@@ -67,7 +71,7 @@ button {
     border-radius: 40px;
     min-width: 90px;
     color: rgb(75, 75, 247);
-    background-color: lightseagreen;
+    background-color: rgb(23, 248, 237);
 }
 
 #clear {
